@@ -1,2 +1,2 @@
-# spend-track
+# spend_track
 Expense tracker using Django
