@@ -1,7 +1,8 @@
 from django.contrib import admin
-from .models import Category, SubCategory
+from .models import ExpenseCategory, ExpenseSubCategory, IncomeCategory
 
 # Register your models here.
 
-admin.site.register(Category)
-admin.site.register(SubCategory)
+admin.site.register(ExpenseCategory)
+admin.site.register(ExpenseSubCategory)
+admin.site.register(IncomeCategory)

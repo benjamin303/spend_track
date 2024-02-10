@@ -1,12 +1,12 @@
 from django.db import models
-from category.models import Category
-from category.models import SubCategory
+from category.models import ExpenseCategory
+from category.models import ExpenseSubCategory
 
 # Create your models here.
 
 class Expense(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
-    subcategory = models.ForeignKey(SubCategory, on_delete=models.SET_NULL, null=True, blank=True)
+    category = models.ForeignKey(ExpenseCategory, on_delete=models.SET_NULL, null=True, blank=True)
+    subcategory = models.ForeignKey(ExpenseSubCategory, on_delete=models.SET_NULL, null=True, blank=True)
     methodofpayment = models.ForeignKey('MethodOfPayment', on_delete=models.SET_NULL, null=True, blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField(auto_now_add=True)

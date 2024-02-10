@@ -1,5 +1,3 @@
-from django.http import HttpResponse
-from django.template import loader
 from .models import Expense
 from django.shortcuts import render, redirect
 from .forms import ExpenseForm
@@ -11,7 +9,7 @@ def index(request):
     context = {
         'myexpenses': myexpenses,
     }
-    return render(request, 'index.html', context)
+    return render(request, 'expense/index.html', context)
 
 def addExpense(request):
     form = ExpenseForm()
@@ -22,20 +20,20 @@ def addExpense(request):
         if form.is_valid():
             form.save()
             print('Form is successfully. It work!')
-            return redirect('list')
+            return redirect('/expense/list')
         else:
             print('Error')
             print('Form errors:', form.errors)
         
     context = {'form': form}
-    return render(request, 'addExpense.html', context)
+    return render(request, 'expense/addExpense.html', context)
 
 def list(request):
     myexpenses = Expense.objects.order_by('-date', 'amount').select_related('category', 'subcategory', 'methodofpayment').all()
     context = {
         'myexpenses': myexpenses,
     }
-    return render(request, 'list.html', context)
+    return render(request, 'expense/list.html', context)
 
 def edit(request, id):
     expense = Expense.objects.get(id=id)
@@ -45,22 +43,22 @@ def edit(request, id):
         form = ExpenseForm(request.POST, instance=expense)
         if form.is_valid():
             form.save()
-            return redirect('/list')
+            return redirect('/expense/list')
     
     context = {'form': form}
-    return render(request, 'edit.html', context)
+    return render(request, 'expense/edit.html', context)
     
 def details(request, id):
     myexpense = Expense.objects.get(id=id)
     context = {
         'myexpense': myexpense,
     }
-    return render(request, 'details.html', context)
+    return render(request, 'expense/details.html', context)
     
 def delete(request, id):
     expense = Expense.objects.get(id=id)
     if request.method == 'POST':
         expense.delete()
-        return redirect('list')
-    return render(request, 'delete.html', {'obj':expense})
+        return redirect('/expense/list')
+    return render(request, 'expense/delete.html', {'obj':expense})
 

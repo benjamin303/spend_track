@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'category',
     'expense',
+    'income',
 ]
 
 MIDDLEWARE = [
@@ -123,6 +124,10 @@ TIME_ZONE = 'Europe/Ljubljana'
 USE_I18N = True
 
 USE_TZ = True
+
+USE_L10N = False
+
+DATE_FORMAT = 'd. F Y'
 
 
 # Static files (CSS, JavaScript, Images)
