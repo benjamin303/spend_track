@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'category',
     'expense',
     'income',
+    'balance',
 ]
 
 MIDDLEWARE = [
