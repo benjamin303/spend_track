@@ -1,66 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Balance</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
+{% extends "base.html" %}
+{% block title %}Balance{% endblock title %}
+{% block style %}
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
 
-        td, th {
-            border: 1px solid #ddd;
-            text-align: left;
-            padding: 8px;
-        }
+    td,
+    th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
 
-        tr:nth-child(even) {
-            background-color: #ddd;
-        }
-    </style>
-</head>
-<body>
-    <h1>Balance</h1>
-    <br>
-    <h2>Last three incomes</h2>
-    <table>
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Balance</h1>
+<br>
+<h2>Last three incomes</h2>
+<table>
+    <tr>
+        <th>Amount</th>
+        <th>Category</th>
+        <th>Date</th>
+    </tr>
+    {% for income in last_three_incomes %}
         <tr>
-            <th>Amount</th>
-            <th>Category</th>
-            <th>Date</th>
+            <td>{{income.amount}}</td>
+            <td>{{income.category.name}}</td>
+            <td>{{income.date}}</td>
         </tr>
-        {% for income in last_three_incomes %}
-            <tr>
-                <td>{{income.amount}}</td>
-                <td>{{income.category.name}}</td>
-                <td>{{income.date}}</td>
-            </tr>
-        {% endfor %}
-    </table>
-    
-    <br>
-    <h2>Last three expenses</h2>
-    <table>
+    {% endfor %}
+</table>
+
+<br>
+<h2>Last three expenses</h2>
+<table>
+    <tr>
+        <th>Amount</th>
+        <th>Category</th>
+        <th>Date</th>
+    </tr>
+    {% for expense in last_three_expenses %}
         <tr>
-            <th>Amount</th>
-            <th>Category</th>
-            <th>Date</th>
+            <td>{{expense.amount}}</td>
+            <td>{{expense.category.name}}</td>
+            <td>{{expense.date}}</td>
         </tr>
-        {% for expense in last_three_expenses %}
-            <tr>
-                <td>{{expense.amount}}</td>
-                <td>{{expense.category.name}}</td>
-                <td>{{expense.date}}</td>
-            </tr>
-        {% endfor %}
-    </table>
+    {% endfor %}
+</table>
 
-    <br>
-    <h3>Total Income: {{ total_incomes }}</h3>
-    <h3>Total Expense: {{ total_expense }}</h3>
-    <h2>Balance: {{balance}}</h3>
-
-</body>
-</html>
+<br>
+<h3>Total Income: {{ total_incomes }}</h3>
+<h3>Total Expense: {{ total_expense }}</h3>
+<h2>Balance: {{balance}}</h3>
+{% endblock %}
