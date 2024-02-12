@@ -61,4 +61,41 @@
 <h3>Total Income: {{ total_incomes }}</h3>
 <h3>Total Expense: {{ total_expense }}</h3>
 <h2>Balance: {{balance}}</h3>
+
+<h2>Total Expense with Card: {{total_expense_card}}</h2>
+<h2>Total Expense with Cash: {{total_expense_cash}}</h2>
+
+<h2>Total Income with Card: {{total_income_card}}</h2>
+<h2>Total Income with Cash: {{total_income_cash}}</h2>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+
+
+<canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+
+<script>
+
+    const xValues = ["Expense Card", "Expense Cash", "Income Card", "Income Cash"];
+    const yValues = [{{ total_expense_card }}, {{ total_expense_cash }}, {{ total_income_card }}, {{ total_income_cash }}];
+    const barColors = ["red", "green", "blue", "orange"];
+    
+    new Chart("myChart", {
+        type: "bar",
+        data: {
+            labels: xValues,
+            datasets: [{
+                backgroundColor: barColors,
+                data: yValues
+            }]
+        },
+        options: {
+            legend: { display: false },
+            title: {
+                display: true,
+                text: "Financial Overview"
+            }
+        }
+    });
+    </script>
 {% endblock %}

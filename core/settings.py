@@ -91,7 +91,7 @@ DATABASES = {
         'NAME': 'spendTracker',
         'USER': 'benjamin',
         'PASSWORD': 'benjamin',
-        'HOST': '192.168.1.108',
+        'HOST': '192.168.1.243',
         'PORT': '3306',
     }
 }
