@@ -7,5 +7,24 @@
 </head>
 <body>
     <h1>Category</h1>
+    <a href="/">Home</a>
+    <a href="/category/add">Add test</a>
+    <a href="/category/addIncomeCategory">Add Income Category</a>
+    <a href="/category/addExpenseCategory">Add Expense Category</a>
+
+    <h2>Expense Category List</h2>
+    <ul>
+        {% for category in expense_categories %}
+            <li>{{ category.name }}
+                <ul>
+                    {% for subcategory in category.expensesubcategory_set.all %}
+                        <li>{{ subcategory.name }}</li>
+                    {% empty %}
+                        {% comment %} <li>No subcategories</li> {% endcomment %}
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
