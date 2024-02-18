@@ -46,6 +46,3 @@ def delete(request, id):
         income.delete()
         return redirect('/income')
     return render(request, 'income/delete.html', {'obj':income})
-
-def test(request):
-    return render(request, 'income/test.html')

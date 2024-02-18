@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Expenses{% endblock%}
+
+{% block content%}
+    <h2>All expenses</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Amount</th>
+                <th>Category</th>
+                <td class="d-none d-sm-table-cell">Subcategory</td>
+                <td class="d-none d-sm-table-cell">Date</td>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for expense in myexpenses %}
+                <tr>
+                    <td>{{expense.amount}}</td>
+                    <td>{{expense.category.name}}</td>
+                    <td class="d-none d-sm-table-cell">{{expense.subcategory.name}}</td>
+                    <td class="d-none d-sm-table-cell">{{expense.date}}</td>
+                    <td><a href="/expense/details/{{ expense.id }}">details</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

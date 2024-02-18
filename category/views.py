@@ -16,9 +16,6 @@ def index(request):
     }
     return render(request, 'category/index.html', context)
 
-def add(request):
-    return render(request, 'category/add.html')
-
 def addIncomeCategory(request):
     form = IncomeCategoryForm()
     income_categories = IncomeCategory.objects.order_by('name').all()

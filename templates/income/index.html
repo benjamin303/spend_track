@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Incomes{% endblock title %}
+
+{% block content %}
+
+    <h2>All Incomes</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Amount</th>
+                <th>Category</th>
+                <td class="d-none d-sm-table-cell">Description</td>
+                <td class="d-none d-sm-table-cell">Date</td>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for incomes in incomes %}
+                <tr>
+                    <td>{{incomes.amount}}</td>
+                    <td>{{incomes.category.name}}</td>
+                    <td class="d-none d-sm-table-cell">{{incomes.description}}</td>
+                    <td class="d-none d-sm-table-cell">{{incomes.date}}</td>
+                    <td><a href="/income/edit/{{incomes.id}}">Edit</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -11,7 +11,7 @@ def index(request):
     }
     return render(request, 'expense/index.html', context)
 
-def addExpense(request):
+def add(request):
     form = ExpenseForm()
     
     if request.method == 'POST':
@@ -26,7 +26,7 @@ def addExpense(request):
             print('Form errors:', form.errors)
         
     context = {'form': form}
-    return render(request, 'expense/addExpense.html', context)
+    return render(request, 'expense/add.html', context)
 
 def edit(request, id):
     expense = Expense.objects.get(id=id)

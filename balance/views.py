@@ -53,4 +53,4 @@ def index(request):
     
     
     
-    return render(request, 'index.html', context)
+    return render(request, 'balance/index.html', context)

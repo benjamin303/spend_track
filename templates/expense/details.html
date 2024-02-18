@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Details{% endblock title %}
+
+{% block content %}
+    <h1>Details page</h1>
+    <h5>Amount: {{ myexpense.amount }}</h5>
+    <h5>Description: {{ myexpense.description }}</h5>
+    <h5>Category: {{myexpense.category}}</h5>
+    <h5>Subcategory: {{myexpense.subcategory}}</h5>
+    <h5>Method of payment: {{myexpense.methodofpayment}}</h5>
+    <h6>Date: {{ myexpense.date }}</h6>
+
+    <br>
+    <a href="/expense/edit/{{myexpense.id}}">Edit</a>
+    <a href="/expense/delete/{{myexpense.id}}">Delete</a>
+{% endblock %}
