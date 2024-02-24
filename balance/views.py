@@ -2,6 +2,7 @@ from django.shortcuts import render
 from expense.models import Expense, MethodOfPayment
 from income.models import Income, MethodOfIncome
 from django.db.models import Sum
+from itertools import chain
 
 # Create your views here.
 def index(request):
@@ -36,7 +37,6 @@ def index(request):
         total_income_cash = 0
     
     
-    #calculate balance
     balance = total_incomes - total_expense
         
     context = {
@@ -51,6 +51,16 @@ def index(request):
         'total_income_cash': total_income_cash,
     }
     
-    
-    
     return render(request, 'balance/index.html', context)
+
+def transactions(request):
+    AllIncomes = Income.objects.order_by('-date').all()
+    AllExpenses = Expense.objects.order_by('-date').all()
+    
+    combined_list = list(chain(AllIncomes, AllExpenses))
+    
+    combined_sorted = sorted(combined_list, key=lambda instance:instance.date, reverse=True)
+    context = {
+        'combined_transactions': combined_sorted
+    }
+    return render(request, 'transactions/index.html', context)

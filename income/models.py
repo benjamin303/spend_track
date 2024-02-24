@@ -13,6 +13,9 @@ class Income(models.Model):
     def __str__(self):
         return f"{self.amount} - {self.category.name} - {self.date}"
     
+    def get_transaction_type(self):
+        return "Income"
+    
 class MethodOfIncome(models.Model):
     method = models.CharField(max_length=50)
     

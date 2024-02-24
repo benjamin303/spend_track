@@ -18,6 +18,9 @@ class Expense(models.Model):
     
     def __str__(self):
         return f"{self.amount}  - {self.category.name} - {self.subcategory.name if self.subcategory else 'No Subcategory'}"
+    
+    def get_transaction_type(self):
+        return "Expense"
 
 class MethodOfPayment(models.Model):
     method = models.CharField(max_length=100)

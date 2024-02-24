@@ -12,6 +12,13 @@ def index(request):
     }
     return render(request, 'income/index.html', context)
 
+def details(request, id):
+    income = Income.objects.get(id=id)
+    context = {
+        'income': income
+    }
+    return render(request, 'income/details.html', context)
+
 def add(request):
     form = IncomeForm()
     

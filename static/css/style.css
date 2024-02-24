@@ -1,0 +1,10 @@
+@import 'variables.css';
+
+.custom-background-color tbody tr.income-row td {
+    background-color: #c8e6c9 !important;
+}
+
+.custom-background-color tbody tr.expense-row td {
+    background-color: #ffcdd2 !important;
+}
+
