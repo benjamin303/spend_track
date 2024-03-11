@@ -5,15 +5,30 @@
 
 <div class="container text-center">
     <div class="row mt-sm-3">
-        <div class="col  mt-sm-3">
+        <div class="col  mt-sm-3"> {% comment %} Balance {% endcomment %}
             <div class="d-flex align-items-start flex-column" style="height: 100%;">
                 <div class="mb-auto">
                     <h3 class="text-start">Balance</h3>
-                    <p class="clg p-1">Total Income: {{ total_incomes }}</p>
-                    <p class="clr p-1">Total Expense: {{ total_expense }}</p>
+                    <p class="clg p-2"> Total Income: {{ total_incomes }}</p>
+                    <p class="clr p-2">Total Expense: {{ total_expense }}</p>
                 </div>
                 <div>
-                    <h3 class="align-items-end p-2 {% if balance >= 0 %}clg{% else %}clr{% endif %}">Balance: {{balance}}</h3>
+                    
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="align-items-end p-2 {% if balance >= 0 %}clg{% else %}clr{% endif %}">Balance: {{balance}}</h3>
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <div>
+                                    <p class="align-items-end p-1 {% if balance >= 0 %}clg{% else %}clr{% endif %}">Card: {{balance}}</p>
+                                </div>
+                                <div>
+                                    <p class="align-items-end p-1 {% if balance >= 0 %}clg{% else %}clr{% endif %}">Cash: {{balance}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -31,9 +46,9 @@
                 </thead>
                 <tbody>
                     {% for income in last_three_incomes %}
-                        <tr>
-                            <td class="text-end">{{income.amount}}</td>
-                            <td>{{income.category.name}}</td>
+                    <tr>
+                        <td class="text-end">{{income.amount}}</td>
+                        <td>{{income.category.name}}</td>
                             <td>{{income.date}}</td>
                         </tr>
                     {% endfor %}
@@ -63,6 +78,79 @@
         </div>
     </div>
 </div>
+
+
+{% comment %} <form method="get">
+    {{ form.as_p }}
+    <button type="submit">Filter</button>
+</form>
+
+<h2>Total Expenses: {{ total_expenses }}</h2>
+<ul>
+    {% for expense in expenses %}
+        <li>{{ expense.amount }} - {{ expense.date }}</li>
+    {% endfor %}
+</ul>
+
+<h2>Total Incomes: {{ total_incomes }}</h2>
+<ul>
+    {% for income in incomes %}
+        <li>{{ income.amount }} - {{ income.date }}</li>
+    {% endfor %}
+</ul> {% endcomment %}
+
+{% comment %} <p>Expenses by month: {{expenses_by_month}}</p> {% endcomment %}
+
+<canvas id="myChart1" style="width:100%;max-width:600px"></canvas>
+
+
+{{ expenses_by_month|json_script:"expenses_by_month_data" }}
+{{ incomes_by_month|json_script:"incomes_by_month_data" }}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const expensesData = JSON.parse(document.getElementById('expenses_by_month_data').textContent);
+    const incomesData = JSON.parse(document.getElementById('incomes_by_month_data').textContent);
+
+    const yexpenses = expensesData.totals;
+    const yincomes = incomesData.totals;
+
+    const xmonths = ["Jan", "Feb", "Mar"];
+
+    new Chart("myChart1", {
+        type: "bar",
+        data: {
+            datasets: [{
+                type: 'bar',
+                label: 'Expenses',
+                backgroundColor: 'rgb(255,0,0)',
+                data: yexpenses
+            }, {
+                type: 'bar',
+                label: 'Incomes',
+                backgroundColor: 'rgb(0,255,0)',
+                data: yincomes
+            }],
+            labels: xmonths
+        },
+        options: {
+            legend: {display: true},
+            title: {
+                display: true,
+                text: "Expenses and Incomes by Month"
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+});
+</script>
+
 
 {% endblock %}
         

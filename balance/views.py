@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from expense.models import Expense, MethodOfPayment
 from income.models import Income, MethodOfIncome
-from django.db.models import Sum
+from django.db.models import Sum, IntegerField
 from itertools import chain
+from .forms import DateFilterForm
+from django.db.models.functions import Cast, ExtractMonth
 
 # Create your views here.
 def index(request):
@@ -13,42 +15,76 @@ def index(request):
     
     #calculate total expenses and incomes
     total_expense = Expense.objects.aggregate(Sum('amount'))['amount__sum'] or 0
-    total_incomes = Income.objects.aggregate(Sum('amount'))['amount__sum'] or 0
-    card_payment_method = MethodOfPayment.objects.filter(method='card').first()
-    if card_payment_method:
-        total_expense_card = Expense.objects.filter(methodofpayment=card_payment_method).aggregate(Sum('amount'))['amount__sum'] or 0
-    else:
-        total_expense_card = 0
-    cash_payment_method = MethodOfPayment.objects.filter(method='cash').first()
-    if cash_payment_method:
-        total_expense_cash = Expense.objects.filter(methodofpayment=cash_payment_method).aggregate(Sum('amount'))['amount__sum'] or 0
-    else:
-        total_expense_cash = 0
+    total_income = Income.objects.aggregate(Sum('amount'))['amount__sum'] or 0
+
+    balance = total_income - total_expense
+    
+    
+    
+    # form = DateFilterForm(request.GET)
+    
+    # filtered_incomes = Income.objects.all()
+    # filtered_expenses = Expense.objects.all()
+    
+    # if form.is_valid():
+    #     year = form.cleaned_data.get('year')
+    #     month = form.cleaned_data.get('month')
+    #     day = form.cleaned_data.get('day')
         
-    card_income_method = MethodOfIncome.objects.filter(method='card').first()
-    if card_income_method:
-        total_income_card = Income.objects.filter(methodofincome=card_income_method).aggregate(Sum('amount'))['amount__sum'] or 0
-    else:
-        total_expense_card = 0
-    cash_income_method = MethodOfIncome.objects.filter(method='cash').first()
-    if cash_income_method:
-        total_income_cash = Income.objects.filter(methodofincome=cash_income_method).aggregate(Sum('amount'))['amount__sum'] or 0
-    else:
-        total_income_cash = 0
+    #     if year:
+    #         filtered_expenses = filtered_expenses.filter(date__year=year)
+    #         filtered_incomes = filtered_incomes.filter(date__year=year)
+    #     if month:
+    #         filtered_expenses = filtered_expenses.filter(date__month=month)
+    #         filtered_incomes = filtered_incomes.filter(date__month=month)
+    #     if day:
+    #         filtered_expenses = filtered_expenses.filter(date__day=day)
+    #         filtered_incomes = filtered_incomes.filter(date__day=day)
+
+    # raw_incomes_sum = filtered_incomes.aggregate(Sum('amount'))['amount__sum'] or 0
+    # raw_expenses_sum = filtered_expenses.aggregate(Sum('amount'))['amount__sum'] or 0
     
-    
-    balance = total_incomes - total_expense
+    # total_incomes = round(raw_incomes_sum)
+    # total_expenses = round(raw_expenses_sum)
+
+
+    expenses_by_month_qs = Expense.objects.annotate(
+        month=Cast(ExtractMonth('date'), IntegerField())
+    ).values('month').annotate(total=Sum('amount')).order_by('month')
+
+    # months = list(expenses_by_month_qs.values_list('month', flat=True))
+    totals = list(expenses_by_month_qs.values_list('total', flat=True))
+
+    expenses_by_month = {
+        # 'months': months,
+        'totals': totals,
+    }
+
+    incomes_by_month_qs = Income.objects.annotate(
+        month=Cast(ExtractMonth('date'), IntegerField())
+    ).values('month').annotate(total=Sum('amount')).order_by('month')
+
+    # months = list(incomes_by_month_qs.values_list('month', flat=True))
+    totals = list(incomes_by_month_qs.values_list('total', flat=True))
+
+    incomes_by_month = {
+        # 'months': months,
+        'totals': totals,
+    }
         
     context = {
         'last_three_expenses': last_three_expenses,
         'last_three_incomes': last_three_income,
         'total_expense': total_expense,
-        'total_incomes': total_incomes,
+        'total_income': total_income,
         'balance': balance,
-        'total_expense_card': total_expense_card,
-        'total_expense_cash': total_expense_cash,
-        'total_income_card': total_income_card,
-        'total_income_cash': total_income_cash,
+        # 'form': form,
+        # 'expenses': filtered_expenses,
+        # 'incomes': filtered_incomes,
+        # 'total_expenses': total_expenses,
+        # 'total_incomes': total_incomes,
+        'expenses_by_month': expenses_by_month,
+        'incomes_by_month': incomes_by_month,
     }
     
     return render(request, 'balance/index.html', context)
