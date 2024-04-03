@@ -1,3 +1,5 @@
+import calendar
+import datetime
 from django.shortcuts import render
 from expense.models import Expense, MethodOfPayment
 from income.models import Income, MethodOfIncome
@@ -17,74 +19,43 @@ def index(request):
     total_expense = Expense.objects.aggregate(Sum('amount'))['amount__sum'] or 0
     total_income = Income.objects.aggregate(Sum('amount'))['amount__sum'] or 0
 
+    #balance
     balance = total_income - total_expense
     
-    
-    
-    # form = DateFilterForm(request.GET)
-    
-    # filtered_incomes = Income.objects.all()
-    # filtered_expenses = Expense.objects.all()
-    
-    # if form.is_valid():
-    #     year = form.cleaned_data.get('year')
-    #     month = form.cleaned_data.get('month')
-    #     day = form.cleaned_data.get('day')
-        
-    #     if year:
-    #         filtered_expenses = filtered_expenses.filter(date__year=year)
-    #         filtered_incomes = filtered_incomes.filter(date__year=year)
-    #     if month:
-    #         filtered_expenses = filtered_expenses.filter(date__month=month)
-    #         filtered_incomes = filtered_incomes.filter(date__month=month)
-    #     if day:
-    #         filtered_expenses = filtered_expenses.filter(date__day=day)
-    #         filtered_incomes = filtered_incomes.filter(date__day=day)
-
-    # raw_incomes_sum = filtered_incomes.aggregate(Sum('amount'))['amount__sum'] or 0
-    # raw_expenses_sum = filtered_expenses.aggregate(Sum('amount'))['amount__sum'] or 0
-    
-    # total_incomes = round(raw_incomes_sum)
-    # total_expenses = round(raw_expenses_sum)
-
-
+    # query set of month, and total expense by month
     expenses_by_month_qs = Expense.objects.annotate(
         month=Cast(ExtractMonth('date'), IntegerField())
     ).values('month').annotate(total=Sum('amount')).order_by('month')
 
-    # months = list(expenses_by_month_qs.values_list('month', flat=True))
-    totals = list(expenses_by_month_qs.values_list('total', flat=True))
-
-    expenses_by_month = {
-        # 'months': months,
-        'totals': totals,
-    }
-
+    # query set of month, and total incomes by month
     incomes_by_month_qs = Income.objects.annotate(
         month=Cast(ExtractMonth('date'), IntegerField())
     ).values('month').annotate(total=Sum('amount')).order_by('month')
-
-    # months = list(incomes_by_month_qs.values_list('month', flat=True))
-    totals = list(incomes_by_month_qs.values_list('total', flat=True))
-
-    incomes_by_month = {
-        # 'months': months,
-        'totals': totals,
+    
+    # list of monthly expenses
+    expenses_by_month = {
+        'total_expenses_by_months':  list(expenses_by_month_qs.values_list('total', flat=True)),
     }
-        
+
+    # list of monthly incomes
+    incomes_by_month = {
+        'total_incomes_by_months': list(incomes_by_month_qs.values_list('total', flat=True)),
+    }
+
+    # all months 
+    months_expenses = [calendar.month_abbr[month['month']] for month in expenses_by_month_qs]
+    months_incomes = [calendar.month_abbr[month['month']] for month in incomes_by_month_qs]
+    all_months = sorted(set(months_expenses + months_incomes), key=lambda x: datetime.datetime.strptime(x, "%b"))
+
     context = {
         'last_three_expenses': last_three_expenses,
         'last_three_incomes': last_three_income,
         'total_expense': total_expense,
         'total_income': total_income,
         'balance': balance,
-        # 'form': form,
-        # 'expenses': filtered_expenses,
-        # 'incomes': filtered_incomes,
-        # 'total_expenses': total_expenses,
-        # 'total_incomes': total_incomes,
         'expenses_by_month': expenses_by_month,
         'incomes_by_month': incomes_by_month,
+        'months': all_months,
     }
     
     return render(request, 'balance/index.html', context)

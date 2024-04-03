@@ -9,7 +9,7 @@
             <div class="d-flex align-items-start flex-column" style="height: 100%;">
                 <div class="mb-auto">
                     <h3 class="text-start">Balance</h3>
-                    <p class="clg p-2"> Total Income: {{ total_incomes }}</p>
+                    <p class="clg p-2"> Total Income: {{ total_income }}</p>
                     <p class="clr p-2">Total Expense: {{ total_expense }}</p>
                 </div>
                 <div>
@@ -79,54 +79,31 @@
     </div>
 </div>
 
-
-{% comment %} <form method="get">
-    {{ form.as_p }}
-    <button type="submit">Filter</button>
-</form>
-
-<h2>Total Expenses: {{ total_expenses }}</h2>
-<ul>
-    {% for expense in expenses %}
-        <li>{{ expense.amount }} - {{ expense.date }}</li>
-    {% endfor %}
-</ul>
-
-<h2>Total Incomes: {{ total_incomes }}</h2>
-<ul>
-    {% for income in incomes %}
-        <li>{{ income.amount }} - {{ income.date }}</li>
-    {% endfor %}
-</ul> {% endcomment %}
-
-{% comment %} <p>Expenses by month: {{expenses_by_month}}</p> {% endcomment %}
-
 <canvas id="myChart1" style="width:100%;max-width:600px"></canvas>
 
 
 {{ expenses_by_month|json_script:"expenses_by_month_data" }}
 {{ incomes_by_month|json_script:"incomes_by_month_data" }}
+{{ months|json_script:"months_data" }}
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const expensesData = JSON.parse(document.getElementById('expenses_by_month_data').textContent);
     const incomesData = JSON.parse(document.getElementById('incomes_by_month_data').textContent);
+    const months = JSON.parse(document.getElementById('months_data').textContent);
 
-    const yexpenses = expensesData.totals;
-    const yincomes = incomesData.totals;
-
-    const xmonths = ["Jan", "Feb", "Mar"];
+    const yexpenses = expensesData.total_expenses_by_months;
+    const yincomes = incomesData.total_incomes_by_months;
+    const xmonths = months;
 
     new Chart("myChart1", {
         type: "bar",
         data: {
             datasets: [{
-                type: 'bar',
                 label: 'Expenses',
                 backgroundColor: 'rgb(255,0,0)',
                 data: yexpenses
             }, {
-                type: 'bar',
                 label: 'Incomes',
                 backgroundColor: 'rgb(0,255,0)',
                 data: yincomes
