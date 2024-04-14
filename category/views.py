@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from .models import IncomeCategory, ExpenseCategory, ExpenseSubCategory
 from .forms import IncomeCategoryForm, ExpenseCategoryForm, ExpenseSubCategoryForm
@@ -15,6 +16,12 @@ def index(request):
         'expense_subcategories': expense_subcategories
     }
     return render(request, 'category/index.html', context)
+
+    # select a subcategory depend on the selected category
+def subcategories(request):
+    category_id = request.GET.get('category_id')
+    subcategories = ExpenseSubCategory.objects.filter(parent_category_id=category_id).values('id', 'name')
+    return JsonResponse({'subcategories': list(subcategories)})
 
 def addIncomeCategory(request):
     form = IncomeCategoryForm()

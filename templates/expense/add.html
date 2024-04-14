@@ -3,15 +3,41 @@
 
 {% block content %}
 
-    <h1 class="clr"> Add expense</h1>
+    <h1 class="clr">Add expense</h1>
 
-    <div>
-        <form method="POST" action="">
-            {% csrf_token %}
-            {{form.as_p}}
-            <input type="submit" value="Submit" />
-        </form>
-    </div>
+<div>
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit" />
+    </form>
+</div>
 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const categorySelect = document.getElementById('id_category');
+    const subcategorySelect = document.getElementById('id_subcategory');
+    subcategorySelect.disabled = true; // disable selecting subcategory before category
+
+    categorySelect.onchange = function() {
+        const categoryId = this.value;
+        if (categoryId) {
+            subcategorySelect.disabled = false; // enable selecting subcategory
+            fetch(`{% url 'category_subcategories' %}?category_id=${categoryId}`)
+                .then(response => response.json())
+                .then(data => {
+                    subcategorySelect.innerHTML = '<option value="">Select a subcategory</option>';
+                    data.subcategories.forEach(function(sub) {
+                        const option = new Option(sub.name, sub.id);
+                        subcategorySelect.add(option);
+                    });
+                })
+                .catch(error => console.error('Error loading the subcategories:', error));
+        } else {
+            subcategorySelect.disabled = true; // disable selecting subcategory
+            subcategorySelect.innerHTML = '<option value="">Select a subcategory</option>';
+        }
+    };
+});
+</script>
 {% endblock %}
-    
