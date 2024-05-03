@@ -19,3 +19,12 @@ class IncomeCategory(models.Model):
     
     def __str__(self):
         return self.name
+
+class ExpenseCompanies(models.Model):
+    name = models.CharField(max_length=255)
+    categories = models.ManyToManyField(ExpenseCategory)
+    # parent_category = models.ForeignKey(ExpenseCategory, on_delete=models.CASCADE)
+
+    def __str__(self):
+        # return self.name
+        return f"{self.name}  - {self.categories}"
