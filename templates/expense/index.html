@@ -1,28 +1,57 @@
 {% extends 'base.html' %}
-{% block title %}Expenses{% endblock%}
+{% block title %}Expenses{% endblock %}
 
-{% block content%}
-    <h2 class="clr">All expenses</h2>
-    <table class="table table-striped">
-        <thead>
+{% block content %}
+<div class="container mt-3">
+    <h2 class="mb-4">All expenses</h2>
+
+    <form method="get" action="" class="row g-3 mb-4 align-items-end">
+        <div class="col-md-4">
+            <label for="month-select" class="form-label">Month</label>
+            <select id="month-select" name="month" class="form-select">
+                <option value="" {% if not month_selected %}selected{% endif %}>All</option>
+                {% for num, name in months %}
+                <option value="{{ num }}" {% if num == month_selected %}selected{% endif %}>{{ name }}</option>
+                {% endfor %}
+            </select>
+            
+        </div>
+        <div class="col-md-4">
+            <label for="year-select" class="form-label">Year</label>
+            <select id="year-select" name="year" class="form-select">
+                {% for i in years %}
+                <option value="{{ i }}" {% if i == year_selected %}selected{% endif %}>{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </form>
+
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="table-white">
             <tr>
                 <th>Amount</th>
                 <th>Category</th>
-                <td class="d-none d-sm-table-cell">Subcategory</td>
-                <td class="d-none d-sm-table-cell">Date</td>
+                <th class="d-none d-sm-table-cell">Subcategory</th>
+                <th class="d-none d-sm-table-cell">Date</th>
                 <th>Description</th>
             </tr>
         </thead>
         <tbody>
             {% for expense in myexpenses %}
-                <tr>
-                    <td>{{expense.amount}}</td>
-                    <td>{{expense.category.name}}</td>
-                    <td class="d-none d-sm-table-cell">{{expense.subcategory.name}}</td>
-                    <td class="d-none d-sm-table-cell">{{expense.date}}</td>
-                    <td><a href="/expense/details/{{ expense.id }}">details</a></td>
-                </tr>
+            <tr>
+                <td>{{expense.amount}}</td>
+                <td>{{expense.category.name}}</td>
+                <td class="d-none d-sm-table-cell">{{expense.subcategory.name}}</td>
+                <td class="d-none d-sm-table-cell">{{expense.date}}</td>
+                <td class="d-sm-table-cell text-center bg-light">
+                    <a href="/expense/details/{{ expense.id }}" class="btn btn-outline-primary text-decoration-none">Details</a>
+                </td>
+                            </tr>
             {% endfor %}
         </tbody>
     </table>
+</div>
 {% endblock %}

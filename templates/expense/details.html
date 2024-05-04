@@ -2,15 +2,22 @@
 {% block title %}Details{% endblock title %}
 
 {% block content %}
-    <h1>Details page</h1>
-    <h5>Amount: {{ myexpense.amount }}</h5>
-    <h5>Description: {{ myexpense.description }}</h5>
-    <h5>Category: {{myexpense.category}}</h5>
-    <h5>Subcategory: {{myexpense.subcategory}}</h5>
-    <h5>Method of payment: {{myexpense.methodofpayment}}</h5>
-    <h6>Date: {{ myexpense.date }}</h6>
-
-    <br>
-    <a href="/expense/edit/{{myexpense.id}}">Edit</a>
-    <a href="/expense/delete/{{myexpense.id}}">Delete</a>
+<div class="container mt-4">
+    <h1 class="mb-3">Details Page</h1>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Expense Details</h4>
+            <p class="card-text"><strong>Amount:</strong> {{ myexpense.amount }}</p>
+            <p class="card-text"><strong>Description:</strong> {{ myexpense.description }}</p>
+            <p class="card-text"><strong>Category:</strong> {{ myexpense.category }}</p>
+            <p class="card-text"><strong>Subcategory:</strong> {{ myexpense.subcategory }}</p>
+            <p class="card-text"><strong>Method of Payment:</strong> {{ myexpense.methodofpayment }}</p>
+            <p class="card-text"><strong>Date:</strong> {{ myexpense.date|date:"d. F Y"}}</p>
+        </div>
+        <div class="card-footer">
+            <a href="/expense/edit/{{ myexpense.id }}" class="btn btn-primary">Edit</a>
+            <a href="/expense/delete/{{ myexpense.id }}" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+</div>
 {% endblock %}
