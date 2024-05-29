@@ -9,26 +9,45 @@ import datetime
 # Create your views here.
 
 def index(request):
+    # Get the current date
+    current_date = datetime.date.today()
+
+    # Get month, year, and order from the request, or use the latest month and year if not provided
     month = request.GET.get('month')
     year = request.GET.get('year')
-    current_date = datetime.date.today()
-    month = int(month) if month and month.isdigit() else None
-    year = int(year) if year and year.isdigit() else current_date.year
+    order = request.GET.get('order', '')
+
+    if not month and not year:
+        # Default to the latest month and year
+        month = current_date.month
+        year = current_date.year
+    else:
+        # Convert to integers if provided
+        month = int(month) if month and month.isdigit() else None
+        year = int(year) if year and year.isdigit() else current_date.year
 
     # Finding min and max year from the database.
     year_range = Expense.objects.aggregate(min_year=Min('date__year'), max_year=Max('date__year'))
     years = range(year_range['min_year'], year_range['max_year'] + 1)
     months = [(i, calendar.month_name[i]) for i in range(1, 13)]
 
+    # Filter expenses for the selected or current month and year
     if month:
         myexpenses = Expense.objects.filter(date__year=year, date__month=month)
     else:
         myexpenses = Expense.objects.filter(date__year=year)
-
-    myexpenses = myexpenses.order_by('date', 'amount').select_related('category', 'subcategory', 'methodofpayment')
+        
+    # ordering by amount
+    if order == 'asc':
+        myexpenses = myexpenses.order_by('amount', '-date').select_related('category', 'subcategory', 'methodofpayment')
+    elif order == 'desc':
+        myexpenses = myexpenses.order_by('-amount', '-date').select_related('category', 'subcategory', 'methodofpayment')
+    else:
+        myexpenses = myexpenses.order_by('-date', 'amount').select_related('category', 'subcategory', 'methodofpayment')
 
     context = {
         'myexpenses': myexpenses,
+        'order': order,
         'months': months,
         'month_selected': month,
         'years': years,
