@@ -3,60 +3,62 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h1>Edit expense</h1>
+  <h1>Edit expense</h1>
 
-    <form method="post" action="">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="{{ form.category.id_for_label }}" class="form-label">Category</label>
-            {{ form.category }}
-        </div>
-        <div class="mb-3">
-            <label for="{{ form.subcategory.id_for_label }}" class="form-label">Subcategory</label>
-            {{ form.subcategory }}
-        </div>
-        <div class="mb-3">
-            <label for="{{ form.amount.id_for_label }}" class="form-label">Amount</label>
-            {{ form.amount }}
-        </div>
-        <div class="mb-3">
-            <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
-            {{ form.description }}
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-    
+  <form method="post" action="">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="{{ form.category.id_for_label }}" class="form-label">Category</label>
+      {{ form.category }}
+    </div>
+    <div class="mb-3">
+      <label for="{{ form.subcategory.id_for_label }}" class="form-label">Subcategory</label>
+      {{ form.subcategory }}
+    </div>
+    <div class="mb-3">
+      <label for="{{ form.methodofpayment.id_for_label }}" class="form-label">Method of payment</label>{{ form.methodofpayment }}</div>
+    <div class="mb-3">
+      <label for="{{ form.amount.id_for_label }}" class="form-label">Amount</label>
+      {{ form.amount }}
+    </div>
+    <div class="mb-3">
+      <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+      {{ form.description }}
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const categorySelect = document.getElementById('id_category');
-        const subcategorySelect = document.getElementById('id_subcategory');
-        const initialSubcategoryId = "{{ form.subcategory.value }}";
+  document.addEventListener("DOMContentLoaded", function() {
+    const categorySelect = document.getElementById('id_category');
+    const subcategorySelect = document.getElementById('id_subcategory');
+    const initialSubcategoryId = "{{ form.subcategory.value }}";
 
-        function updateSubcategories(categoryId, defaultSubcategoryId = null) {
-            fetch(`{% url 'category_subcategories' %}?category_id=${categoryId}`)
-                .then(response => response.json())
-                .then(data => {
-                    subcategorySelect.innerHTML = '<option value="">Select a subcategory</option>';
-                    data.subcategories.forEach(sub => {
-                        const option = new Option(sub.name, sub.id, sub.id === parseInt(defaultSubcategoryId));
-                        subcategorySelect.add(option);
-                    });
-                    if (defaultSubcategoryId) {
-                        subcategorySelect.value = defaultSubcategoryId;
-                    }
-                })
-                .catch(error => console.error('Error loading the subcategories:', error));
-        }
+    function updateSubcategories(categoryId, defaultSubcategoryId = null) {
+      fetch(`{% url 'category_subcategories' %}?category_id=${categoryId}`)
+        .then(response => response.json())
+        .then(data => {
+          subcategorySelect.innerHTML = '<option value="">Select a subcategory</option>';
+          data.subcategories.forEach(sub => {
+            const option = new Option(sub.name, sub.id, sub.id === parseInt(defaultSubcategoryId));
+            subcategorySelect.add(option);
+          });
+          if (defaultSubcategoryId) {
+            subcategorySelect.value = defaultSubcategoryId;
+          }
+        })
+        .catch(error => console.error('Error loading the subcategories:', error));
+    }
 
-        if (categorySelect.value) {
-            updateSubcategories(categorySelect.value, initialSubcategoryId);
-        }
+    if (categorySelect.value) {
+      updateSubcategories(categorySelect.value, initialSubcategoryId);
+    }
 
-        categorySelect.onchange = function() {
-            updateSubcategories(this.value);
-        };
-    });
+    categorySelect.onchange = function() {
+      updateSubcategories(this.value);
+    };
+  });
 </script>
 {% endblock %}
