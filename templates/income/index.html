@@ -4,6 +4,34 @@
 {% block content %}
 <div class="container mt-3">
     <h2 class="clg">All Incomes</h2>
+
+    <form method="get" action="" id="filter-form" class="row g-3 mb-4 align-items-end">
+        <div class="col-md-4">
+            <label for="month-select" class="form-label">Month</label>
+            <select id="month-select" name="month" class="form-select">
+                <option value="" {% if not month_selected %}selected{% endif %}>All</option>
+                {% for num, name in months %}
+                <option value="{{ num }}" {% if num == month_selected %}selected{% endif %}>{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="year-select" class="form-label">Year</label>
+            <select id="year-select" name="year" class="form-select">
+                {% for i in years %}
+                <option value="{{ i }}" {% if i == year_selected %}selected{% endif %}>{{ i }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="order-select" class="form-label">Order by Amount</label>
+            <select id="order-select" name="order" class="form-select">
+                <option value="" {% if not order %}selected{% endif %}>None</option>
+                <option value="asc" {% if order == 'asc' %}selected{% endif %}>Min to Max</option>
+                <option value="desc" {% if order == 'desc' %}selected{% endif %}>Max to min</option>
+            </select>
+        </div>
+    </form>
     <table class="table table-striped table-bordered table-hover">
         <thead class="table-white">
             <tr>
@@ -28,4 +56,17 @@
         </tbody>
     </table>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('filter-form');
+        const selects = form.querySelectorAll('select');
+
+        selects.forEach(select => {
+            select.addEventListener('change', function () {
+                form.submit();
+            });
+        });
+    });
+</script>
 {% endblock %}

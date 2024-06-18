@@ -1,14 +1,51 @@
 from django.shortcuts import render, redirect
 from .models import Income
 from .forms import IncomeForm
-from django.http import HttpResponse
+from django.db.models import Min, Max
+import calendar
+import datetime
 
 # Create your views here.
 
 def index(request):
-    incomes = Income.objects.order_by('-date', 'amount').select_related('category', 'methodofincome').all()
+    current_date = datetime.date.today()
+    
+    month = request.GET.get('month')
+    year = request.GET.get('year')
+    order = request.GET.get('order', '')
+    
+    if not month and not year:
+        month = None
+        year = current_date.year
+    else:
+        # Convert to integers if provided
+        month = int(month) if month and month.isdigit() else None
+        year = int(year) if year and year.isdigit() else current_date.year
+        
+    year_range = Income.objects.aggregate(min_year=Min('date__year'), max_year=Max('date__year'))
+    years = range(year_range['min_year'], year_range['max_year'] + 1)
+    months = [(i, calendar.month_name[i]) for i in range(1, 13)]
+    
+    if month:
+        incomes = Income.objects.filter(date__year=year, date__month=month)
+    else:
+        incomes = Income.objects.filter(date__year=year)
+        
+    if order == 'asc':
+        incomes = incomes.order_by('amount', '-date').select_related('category', 'methodofincome')
+    elif order == 'desc':
+        incomes = incomes.order_by('-amount', '-date').select_related('category', 'methodofincome')
+    else:
+        incomes = incomes.order_by('-date', 'amount').select_related('category', 'methodofincome')
+        
+
     context = {
         'incomes': incomes,
+        'order': order,
+        'months': months,
+        'month_selected': month,
+        'years': years,
+        'year_selected': year,
     }
     return render(request, 'income/index.html', context)
 

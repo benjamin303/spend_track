@@ -2,7 +2,6 @@ from .models import Expense
 from django.shortcuts import render, redirect
 from .forms import ExpenseForm
 from django.db.models import Min, Max
-from .models import Expense
 import calendar
 import datetime
 
