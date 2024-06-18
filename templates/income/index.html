@@ -2,15 +2,15 @@
 {% block title %}Incomes{% endblock title %}
 
 {% block content %}
-
+<div class="container mt-3">
     <h2 class="clg">All Incomes</h2>
-    <table class="table table-striped">
-        <thead>
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="table-white">
             <tr>
                 <th>Amount</th>
                 <th>Category</th>
-                <td class="d-none d-sm-table-cell">Description</td>
-                <td class="d-none d-sm-table-cell">Date</td>
+                <th class="d-none d-sm-table-cell">Description</th>
+                <th class="d-none d-sm-table-cell">Date</th>
                 <th>Edit</th>
             </tr>
         </thead>
@@ -21,9 +21,11 @@
                     <td>{{incomes.category.name}}</td>
                     <td class="d-none d-sm-table-cell">{{incomes.description}}</td>
                     <td class="d-none d-sm-table-cell">{{incomes.date}}</td>
-                    <td><a href="/income/edit/{{incomes.id}}">Edit</a></td>
+                    <td class="d-sm-table-cell text-center bg-light">
+                        <a href="/income/details/{{incomes.id}}" class="btn btn-outline-primary">Details</a></td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+</div>
 {% endblock %}

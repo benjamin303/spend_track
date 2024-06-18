@@ -5,10 +5,10 @@
 <h2>Delete expense</h2>
 
     <form method="POST" action="">
+        <a href="{{request.META.HTTP_REFERER}}" class="btn btn-primary">Go back</a>
         {% csrf_token %}
         <p>Are you sure you want to delete "{{obj}}"?</p>
-        <a href="{{request.META.HTTP_REFERER}}">Go back</a>
-        <input type="submit" value="Confirm" />
+        <button type="submit" value="Confirm" class="btn btn-danger">Submit</button>
     </form>
 
 {% endblock content%}

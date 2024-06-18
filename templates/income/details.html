@@ -2,14 +2,22 @@
 {% block title %}Income{% endblock title %}
 
 {% block content %}
-    <h1>Details page</h1>
-    <h5>Amount: {{ income.amount }}</h5>
-    <h5>Description: {{ income.description }}</h5>
-    <h5>Category: {{income.category}}</h5>
-    <h5>Method of payment: {{income.methodofincome}}</h5>
-    <h6>Date: {{ income.date }}</h6>
 
-    <br>
-    <a href="/income/edit/{{income.id}}">Edit</a>
-    <a href="/income/delete/{{income.id}}">Delete</a>
+<div class="container mt-4">
+    <h1 class="mb-3">Details Page</h1>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Income Details</h4>
+            <p class="card-text"><strong>Amount:</strong> {{ income.amount }}</p>
+            <p class="card-text"><strong>Description:</strong> {{ income.description }}</p>
+            <p class="card-text"><strong>Category:</strong> {{ income.category }}</p>
+            <p class="card-text"><strong>Method of income:</strong> {{ income.methodofincome }}</p>
+            <p class="card-text"><strong>Date:</strong> {{ income.date|date:"d. F Y"}}</p>
+        </div>
+        <div class="card-footer">
+            <a href="/income/edit/{{income.id}}"  class="btn btn-primary">Edit</a>
+            <a href="/income/delete/{{income.id}}"  class="btn btn-danger">Delete</a>
+        </div>
+    </div>
+</div>
 {% endblock %}
