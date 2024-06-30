@@ -1,6 +1,9 @@
 # spend_track
 Expense tracker using Django
 
+# Before run project:
+    rename file in inside core directory: mysql_config_base.py to mysql_config.py and change with your own data.
+
 ToDO:
 Plans (plans for expenses like buying motorcycle) (calculate balance after that ...)
 

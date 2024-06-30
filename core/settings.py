@@ -87,17 +87,14 @@ WSGI_APPLICATION = "core.wsgi.application"
 #     }
 # }
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": "spendTracker",
-        "USER": "benjamin",
-        "PASSWORD": "benjamin",
-        "HOST": "127.0.0.1",
-        "PORT": "3306",
-    }
-}
+try:
+    from .mysql_config import DATABASES_CONFIG
+except ImportError:
+    DATABASES_CONFIG = {}
 
+DATABASES = {
+    'default': DATABASES_CONFIG
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

@@ -2,7 +2,7 @@
 {% block title %}Add income{% endblock title %}
 
 {% block content %}
-    <h1 class="clg">Add income</h1>
+    <h2 class="clg p-3">Add income</h2>
     <form method="POST" action="">
         {% csrf_token %}
         {{form.as_p}}

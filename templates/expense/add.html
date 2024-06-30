@@ -2,14 +2,61 @@
 {% block title %}Add expense{% endblock title %}
 
 {% block content %}
+<h2 class="clr p-3">Add expense</h2>
 
-    <h1 class="clr">Add expense</h1>
-
-<div>
+<div class="mt-3">
     <form method="POST" action="">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" value="Submit" class="btn btn-outline-primary">Submit</button>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="form-floating">
+                    {{ form.category }}
+                    <label for="id_category">{{ form.category.label }}</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating">
+                    {{ form.subcategory }}
+                    <label for="id_subcategory">{{ form.subcategory.label }}</label>
+                </div>
+            </div>
+        </div>
+        <div class="row g-3 mt-3">
+            <div class="col-md-6">
+                <div class="form-floating">
+                    {{ form.methodofpayment }}
+                    <label for="id_methodofpayment">{{ form.methodofpayment.label }}</label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating">
+                    {{ form.amount }}
+                    <label for="id_amount">{{ form.amount.label }}</label>
+                </div>
+            </div>
+        </div>
+        <div class="row g-3 mt-3">
+            <div class="col-md-6">
+                <div class="form-floating">
+                    {{ form.date }}
+                    <label for="id_date">{{ form.date.label }}</label>
+                </div>
+            </div>
+        </div>
+        <div class="row g-3 mt-3">
+            <div class="col-12">
+                <div class="form-floating">
+                    {{ form.description }}
+                    <label for="id_description">{{ form.description.label }}</label>
+                    <style>
+                        #id_description {
+                            height: 100px;
+                        }
+                    </style>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-outline-primary mt-4">Submit</button>
     </form>
 </div>
 

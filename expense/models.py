@@ -1,6 +1,8 @@
 from django.db import models
 from category.models import ExpenseCategory
 from category.models import ExpenseSubCategory
+from django.utils.translation import gettext as _
+import datetime
 
 # Create your models here.
 
@@ -9,7 +11,7 @@ class Expense(models.Model):
     subcategory = models.ForeignKey(ExpenseSubCategory, on_delete=models.SET_NULL, null=True, blank=True)
     methodofpayment = models.ForeignKey('MethodOfPayment', on_delete=models.SET_NULL, null=True, blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField(_("Date"), default=datetime.date.today)
     description = models.TextField(null=True, blank=True)
     
     # Not working because ordering is already set in views.py: ".order_by('date', 'amount')"

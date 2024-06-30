@@ -5,6 +5,7 @@
 __pycache__
 db.sqlite3
 media
+mysql_config.py
 
 # Backup files # 
 *.bak 
